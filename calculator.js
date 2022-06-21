@@ -1,8 +1,3 @@
-/*
-let input = sessionStorage.getItem("input");
-let input2 = sessionStorage.getItem("input2");
-let operator = sessionStorage.getItem("operator");
-*/
 
 let display = document.getElementById("numbers");
 let display2 = document.getElementById("numbers2");
@@ -17,7 +12,6 @@ let operator = "";
 let percentige = function (a) {
     return a / 100;
 }
-
 
 let sum = function (a, b) {
    return a + b;
@@ -52,17 +46,17 @@ let screen2 = function(a) {
 
 let operate = function () {
     if (operator == "+") {
-    return sum(Number(input2), Number(input));
+    return (Math.round(sum(Number(input2), Number(input))*1000000)) / 1000000;
     } else if (operator == "-") {
-    return subtract(Number(input2), Number(input));
+    return (Math.round(subtract(Number(input2), Number(input))*1000000))/1000000;
     } else if (operator == "x") {
-    return  multiply(Number(input2), Number(input));
-    } else if (operator == "/") {
-    return divide(Number(input2), Number(input));
-    } else if (operator == "%" && input2) {
-    return percentige(Number(input2));
-    } else if (operator == "%" && !input2) {
-    return percentige(Number(input));
+    return (Math.round(multiply(Number(input2), Number(input))*1000000))/1000000;
+    } else if (operator == "/" && input == "0") {
+    return "DIVISION NOT POSSIBLE !!!! ㋡";
+    } else if(operator == "/") {
+    return (Math.round(divide(Number(input2), Number(input))*1000000))/1000000;
+    } else if (operator == "%") {
+    return (Math.round(percentige(Number(input))*1000000))/1000000;
     }
  }
 
@@ -71,7 +65,7 @@ buttons.map( button => {
     button.addEventListener("click", (e) => {
 
         switch(e.target.innerText) {
-            case "C":
+            case "⌦":
                 display.innerText = display.innerText.slice(0, -1);
                 break;
             case "AC":
@@ -84,16 +78,15 @@ buttons.map( button => {
                 break;
             case "=":
                 display3.innerText += display.innerText
-                display2.innerText = " " + "=" + operate();
+                display2.innerText = "=" + " " + operate();
                 display.innerText = "";
                 break;
             case "+":
             case "-":
             case "x":
-            case "/":
-            case "%":
+            case "/":            
                 if  (input && input2) {
-                    display2.innerText = " " + "=" + operate();
+                    display2.innerText = "=" + " "+ operate();
                     screen2(operate());
                     display3.innerText += (display.innerText + " ");
                     display3.innerText += (e.target.innerText + " ");
@@ -110,14 +103,51 @@ buttons.map( button => {
                     } else if (display3.innerText == e.target.innerText) {
                      display.innerText += "";
                      display3.innerText += "";
-                    } 
+                    } else if (!input && operator == "%") {
+                        display3.innerText += (display.innerText + " ")
+                        action(e.target.innerText);
+                        display3.innerText += (e.target.innerText + " ");
+                        input = "";
+                    }
+                break;
+            case "%":
+                if (input && input2) {                     
+                    input = input2 / 100 * input;                       
+                    display2.innerText =  "=" + " " + operate();
+                    display3.innerText += (display.innerText + " ");
+                    display3.innerText += (e.target.innerText + " ");  
+                    screen2(operate()); 
+                    action("%")          ;        
+                    display.innerText = "";   
+                    input = "";           
+                    } else if (input) {
+                    action(e.target.innerText);
+                    display2.innerText = "=" + " " + operate();
+                    screen2(operate()); //input2 is the answer
+                    display3.innerText += (display.innerText + " ");
+                    display3.innerText += (e.target.innerText + " ");
+                    display.innerText = "";   
+                    input = "";
+                } 
+                break;
+            case ".":
+                if (Array.from(display.innerText).includes (".")) {
+                   display.innerText += "";
+                } else if (display.innerText) {
+                    display.innerText += ".";
+                } 
                 break;
             default:
                 if (display.innerText == "0" ) {
                     display.innerText = display.innerText.slice(0, -1);
+                    display.innerText += e.target.innerText;
+                    screen(e.target.innerText);
+                } else if (display.innerText.length <= 16) {
+                 display.innerText += e.target.innerText;
+                screen(e.target.innerText);
                 }
-                display.innerText += e.target.innerText
-                screen(e.target.innerText)
+               
+                
         }
     })
 })
@@ -133,65 +163,6 @@ buttons.map( button => {
 
 
 
-/*document.getElementById("add").addEventListener("click", () => {
-    if (display.innerText == "+") {
-    sessionStorage.setItem("operator", display.innerText += "");
-    } else {
-    input2 = sessionStorage.setItem("input2", display.innerText += "");
-    };
-    display.innerText = "";
-    sessionStorage.setItem("operator", display.innerText = "+");
-       
-});
-
-document.getElementById("seven").addEventListener("click", () => {
-    if (display.innerText == "+" ||display.innerText == 0) {
-    display.innerText = display.innerText.slice(0, -1);
-    sessionStorage.setItem("input", display.innerText);
-    } 
-    sessionStorage.setItem("input", display.innerText += "7");
-
-});
-
-document.getElementById("eight").addEventListener("click", () => {
-    if (display.innerText == "+") {
-        display.innerText = display.innerText.slice(0, -1);
-        sessionStorage.setItem("input", display.innerText);
-        } 
-    sessionStorage.setItem("input", display.innerText += "8");
-   
-})
-
-document.getElementById("clear").addEventListener("click", () => {
-   display.innerText = display.innerText.slice(0, -1);
-   sessionStorage.setItem("input", display.innerText);
-   
-})
-
-document.getElementById("equal").addEventListener("click", () => {
-    
-    console.log(input);
-    console.log(input2);
-    console.log(operate())
-    
-})
-
-
-document.getElementById("allclear").addEventListener("click", () => {
-    display.innerText = "0";
-    sessionStorage.clear()
-    
-})
-
-
-
-display.innerText = operate()
-console.log(input)
-console.log(operator)
-console.log(input2)
-console.log(operate())
-
-*/
 
 
 
