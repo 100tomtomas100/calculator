@@ -135,6 +135,7 @@ buttons.map( button => {
                    display.innerText += "";
                 } else if (display.innerText) {
                     display.innerText += ".";
+                    screen(e.target.innerText);
                 } 
                 break;
             default:
