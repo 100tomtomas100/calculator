@@ -67,6 +67,7 @@ buttons.map( button => {
         switch(e.target.innerText) {
             case "⌦":
                 display.innerText = display.innerText.slice(0, -1);
+                input = input.slice(0, -1);
                 break;
             case "AC":
                 display.innerText = "0";
